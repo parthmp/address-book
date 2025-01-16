@@ -1,0 +1,18 @@
+# Enable mod_rewrite
+RewriteEngine On
+
+# Ensure the request is not for an actual file or directory
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite the URL to index.php, considering it is within a subdirectory
+RewriteRule ^(.*)$ index.php?/$1 [L]
+
+<FilesMatch "\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+<FilesMatch "index[0-9]?\.php$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
