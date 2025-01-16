@@ -6,7 +6,8 @@
         public function startApp(){
 
             $parsed = $this->parseUrl();
-           
+            //echo '<pre>',print_r($parsed),'</pre>';
+            //die();
             $parsed['lastTwoSegments'] = array_filter($parsed['lastTwoSegments']);
             
             $controller_file_name = 'Main';
@@ -20,7 +21,7 @@
             }
             
             $controller_file = '.'.DIRECTORY_SEPARATOR.'controllers'.DIRECTORY_SEPARATOR.''.$controller_file_name.'.php';
-            
+            //die($controller_file);
             if(!file_exists($controller_file)){
                 die('Error 404');
             }
@@ -61,8 +62,21 @@
             
             $path1_ray = str_ireplace(\Libs\Helper::getRootURL(), '', $baseUrl);
             
+            $path1_ray = str_ireplace('http:', '', $path1_ray);
+            $path1_ray = str_ireplace('https:', '', $path1_ray);
+            
             $segments = explode('/', trim($path1_ray, '/'));
             $last_segments = array_slice($segments,0, 2);
+            
+            $root_url = trim(\Libs\Helper::getRootURL(), '/');
+            $root_url = trim($root_url, '\\');
+
+            $baseUrl = trim($baseUrl, '/');
+            $baseUrl = trim($baseUrl, '\\');
+
+            if($baseUrl == $root_url){
+                $last_segments = [];
+            }
             
             return [
                 'fullUrl' => $full_url,
