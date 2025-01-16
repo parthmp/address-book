@@ -9,10 +9,12 @@
            
             $parsed['lastTwoSegments'] = array_filter($parsed['lastTwoSegments']);
             
+            //echo '<pre>',print_r($parsed),'</pre>';
+            //die();
             
-            $controller_file_name = 'main';
+            $controller_file_name = 'Main';
             if(isset($parsed['lastTwoSegments'][0])){
-                $controller_name = $parsed['lastTwoSegments'][0];
+                $controller_file_name = ucfirst($parsed['lastTwoSegments'][0]);
             }
 
             $method_name = 'index';
@@ -29,9 +31,8 @@
             require_once $controller_file;
 
             $namespace = '\\Controllers';
-            $controller_name = 'Main';
-
-            $className = $namespace . '\\' . $controller_name;
+            
+            $className = $namespace.'\\'.$controller_file_name;
             $obj = new $className;
 
             if(!method_exists($obj, $method_name)){
@@ -39,7 +40,7 @@
             }
 
             parse_str($parsed['getVariables'], $_GET);
-            
+
             call_user_func([$obj, $method_name]);
             
         }
@@ -51,7 +52,7 @@
 
         }
 
-        private function getRootURL(){
+        /*private function getRootURL(){
 
             $protocol = $this->getProtocol();
             
@@ -63,7 +64,7 @@
             
             return $rootUrl;
 
-        }
+        }*/
 
         private function parseUrl(){
 
@@ -75,7 +76,7 @@
             $baseUrl = $url_parts['scheme'].'://'.$url_parts['host'].$url_parts['path'];
             $get_variables = isset($url_parts['query']) ? $url_parts['query'] : '';
             
-            $path1_ray = str_ireplace($this->getRootURL(), '', $baseUrl);
+            $path1_ray = str_ireplace(\Libs\Helper::getRootURL(), '', $baseUrl);
             
             $segments = explode('/', trim($path1_ray, '/'));
             $last_segments = array_slice($segments, -2);
