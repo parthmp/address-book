@@ -123,4 +123,28 @@
 
         }
 
+        public function delete(){
+
+            $address_id = Helper::getSegmentId();
+            
+            if($address_id == ''){
+                Helper::redirect(Helper::link('main/index'));
+            }
+
+            $op = new DBOperations();
+
+            $address = $op->fetchAddressByID($address_id);
+
+            if(empty($address)){
+                Helper::redirect(Helper::link('main/index'));
+            }
+
+            $op->deleteAddressByID($address_id);
+
+            Flash::make('Address removed successfully.', 1);
+            Helper::redirect(Helper::link('main/index'));
+
+
+        }
+
     }

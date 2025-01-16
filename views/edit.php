@@ -45,7 +45,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="zip">Zip code (Must be between 10000-999999)</label>
+                        <label for="zip">Zip code</label>
                         <input type="number" min="10000" max="999999" value="<?php echo $var['address']['zip']; ?>" name="zip" id="zip" class="form-control" required>
                     </div>
                 </div>

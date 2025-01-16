@@ -57,4 +57,12 @@
 
         }
 
+        public function deleteAddressByID($address_id){
+
+            $address_id = Security::strip($address_id, true);
+
+            $this->query("DELETE FROM `addresses` WHERE `id` = :id", ['id' => $address_id]);
+
+        }
+
     }
