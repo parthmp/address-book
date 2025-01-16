@@ -18,6 +18,8 @@
         <br>
         <h1>Test Task</h1>
         <a style="float:right" href="<?php echo \Libs\Helper::link('main/create'); ?>" class="btn btn-primary">Add Address</a>
+        <a href="<?php echo \Libs\Helper::link('main/export_xml'); ?>" class="btn btn-primary">Export to XML</a>
+        <a href="<?php echo \Libs\Helper::link('main/export_json'); ?>" class="btn btn-primary">Export to Json</a>
         <div style="float:none;clear:both"></div>
         <br>
         <table class="table table-striped">

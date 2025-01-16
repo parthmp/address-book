@@ -147,4 +147,67 @@
 
         }
 
+        public function export_xml(){
+
+            $op = new DBOperations();
+
+            $results = $op->fetchAddresses();
+
+            $xml = new \DOMDocument('1.0', 'UTF-8');
+            $xml->formatOutput = true;
+            
+            
+            $root = $xml->createElement('data');
+            $root = $xml->appendChild($root);
+            
+            
+            foreach($results as $row) {
+                $record = $xml->createElement('record');
+                foreach($row as $key => $value) {
+                    $node = $xml->createElement($key);
+                    $nodeText = $xml->createTextNode(htmlspecialchars($value));
+                    $node->appendChild($nodeText);
+                    $record->appendChild($node);
+                }
+                $root->appendChild($record);
+            }
+            
+            
+            header('Content-Type: application/xml');
+            header('Content-Disposition: attachment; filename="export.xml"');
+            header('Content-Length: ' . strlen($xml->saveXML()));
+            header('Cache-Control: no-cache');
+            header('Pragma: no-cache');
+            
+            
+            echo $xml->saveXML();
+
+        }
+
+        public function export_json(){
+
+            $op = new DBOperations();
+
+            $results = $op->fetchAddresses();
+
+            $jsonData = json_encode(
+                [
+                    'data' => $results
+                ], 
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            );
+            
+            
+            // Set headers for download
+            header('Content-Type: application/json');
+            header('Content-Disposition: attachment; filename="export.json"');
+            header('Content-Length: ' . strlen($jsonData));
+            header('Cache-Control: no-cache');
+            header('Pragma: no-cache');
+            
+            // Output JSON
+            echo $jsonData;
+
+        }
+
     }
