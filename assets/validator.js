@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!zip.value.trim()) {
             showError(zip, 'Zip code is required');
             isValid = false;
-        } else if (isNaN(zipValue) || zipValue < 10000 || zipValue > 999999) {
-            showError(zip, 'Please enter a valid zip code between 10000 and 999999');
+        } else if (isNaN(zipValue)/* || zipValue.toString().length < 5 || zipValue.toString().length > 6*/) {
+            showError(zip, 'Please enter a valid zip code');
             isValid = false;
         }
         

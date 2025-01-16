@@ -41,7 +41,7 @@
                         <td>'.$var['addresses'][$z]['first_name'].'</td>
                         <td>'.$var['addresses'][$z]['street'].'</td>
                         <td><a href="'.\Libs\Helper::link('main/edit/'.$var['addresses'][$z]['id']).'" class="btn btn-warning">Edit</a></td>
-                        <td><a href="'.\Libs\Helper::link('main/delete/'.$var['addresses'][$z]['id']).'" class="btn btn-danger">Delete</a></td>
+                        <td><a onClick="return delete_confirm();" href="'.\Libs\Helper::link('main/delete/'.$var['addresses'][$z]['id']).'" class="btn btn-danger">Delete</a></td>
 
                         </tr>';
                     }
@@ -55,6 +55,15 @@
 
     </div>
 
-  
+    <script>
+        function delete_confirm(){
+            if(confirm("Are you sure?")){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    </script>
+
 </body>
 </html>

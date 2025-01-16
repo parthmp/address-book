@@ -53,4 +53,31 @@
             exit();
         }
 
+        public static function getSegmentId(){
+
+            if (!isset($_SERVER['REQUEST_URI'])) {
+                return null;
+            }
+        
+            $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            
+            if (empty($path)) {
+                return null;
+            }
+    
+            
+            $segments = explode('/', trim($path, '/'));
+            
+            $segments = array_filter($segments);
+            
+            if (empty($segments)) {
+                return null;
+            }
+    
+            return end($segments);
+        
+            
+        
+        }
+
     }

@@ -9,9 +9,6 @@
            
             $parsed['lastTwoSegments'] = array_filter($parsed['lastTwoSegments']);
             
-            //echo '<pre>',print_r($parsed),'</pre>';
-            //die();
-            
             $controller_file_name = 'Main';
             if(isset($parsed['lastTwoSegments'][0])){
                 $controller_file_name = ucfirst($parsed['lastTwoSegments'][0]);
@@ -52,20 +49,6 @@
 
         }
 
-        /*private function getRootURL(){
-
-            $protocol = $this->getProtocol();
-            
-            $host = $_SERVER['HTTP_HOST'];
-            
-            $base_path = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-            
-            $rootUrl = $protocol.'://'.$host.$base_path;
-            
-            return $rootUrl;
-
-        }*/
-
         private function parseUrl(){
 
             $protocol = $this->getProtocol();
@@ -79,7 +62,7 @@
             $path1_ray = str_ireplace(\Libs\Helper::getRootURL(), '', $baseUrl);
             
             $segments = explode('/', trim($path1_ray, '/'));
-            $last_segments = array_slice($segments, -2);
+            $last_segments = array_slice($segments,0, 2);
             
             return [
                 'fullUrl' => $full_url,

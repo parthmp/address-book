@@ -40,7 +40,7 @@
             $zip = Security::strip($temp_post['zip'], true);
             $city = Security::strip($temp_post['city'], true);
 
-            if($name != '' && $first_name != '' && $email != '' && $street != '' && $zip != '' && $city != '' && filter_var($email, FILTER_VALIDATE_EMAIL) && $zip >= 10000 && $zip <= 999999){
+            if($name != '' && $first_name != '' && $email != '' && $street != '' && $zip != '' && $city != '' && filter_var($email, FILTER_VALIDATE_EMAIL)){
                 return true;
             }else{
                 return false;
@@ -51,7 +51,7 @@
         public function create_submit(){
 
             if($this->validateForm($_POST)){
-                
+
                 $op = new DBOperations();
                 $op->addNewAddress($_POST);
 
@@ -65,6 +65,62 @@
                 Helper::redirect(Helper::link('main/create'));
             }
             
+        }
+
+        public function edit(){
+            
+            $address_id = Helper::getSegmentId();
+            
+            if($address_id == ''){
+                Helper::redirect(Helper::link('main/index'));
+            }
+
+            $op = new DBOperations();
+
+            $address = $op->fetchAddressByID($address_id);
+
+            if(empty($address)){
+                Helper::redirect(Helper::link('main/index'));
+            }
+            
+            $data['cities'] = $op->fetchCities();
+            $data['address'] = $address;
+            
+            return Helper::view('edit', $data);
+
+        }
+
+        public function edit_submit(){
+
+            if(!isset($_POST['address_id'])){
+                Helper::redirect(Helper::link('main/index'));
+            }
+
+            $address_id = $_POST['address_id'];
+
+            $op = new DBOperations();
+
+            $address = $op->fetchAddressByID($address_id);
+
+            if(empty($address)){
+                Helper::redirect(Helper::link('main/index'));
+            }
+
+            if($this->validateForm($_POST)){
+
+                $op = new DBOperations();
+                $op->updateAddress($_POST, $address_id);
+
+                Flash::make('Address updated successfully.', 1);
+                Helper::redirect(Helper::link('main/index'));
+
+            }else{
+                
+                Flash::store($_POST);
+                Flash::make('Please enter valid details.');
+                Helper::redirect(Helper::link('main/edit/'.$address_id));
+            }
+
         }
 
     }
