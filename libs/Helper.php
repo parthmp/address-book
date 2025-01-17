@@ -41,6 +41,8 @@
         public static function link($url){  
 
             $root_url = Self::getRootURL();
+            $root_url = trim($root_url, '/');
+            $root_url = trim($root_url, '\\');
             return $root_url.'/'.$url;
 
         }
