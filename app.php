@@ -61,8 +61,17 @@
 
             $root_url = \Libs\Helper::getRootURL();
 
+            $root_url = trim($root_url, '/');
+            $root_url = trim($root_url, '\\');
+
+            $baseUrl = trim($baseUrl, '/');
+            $baseUrl = trim($baseUrl, '\\');
+
             $filtered_url = str_ireplace($root_url, '', $baseUrl);
             $filtered_url = trim($filtered_url, '/');
+
+            $filtered_url = trim($filtered_url, '/');
+            $filtered_url = trim($filtered_url, '\\');
 
             $filtered_url_array = explode('/', $filtered_url);
 
