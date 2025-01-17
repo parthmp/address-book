@@ -50,31 +50,93 @@
 
         }
 
-        private function parseUrl(){
+        private function parseUrl() {
 
             $protocol = $this->getProtocol();
+            $full_url = $protocol."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
+            $url_parts = parse_url($full_url);
+            $baseUrl = $url_parts['scheme'].'://'.$url_parts['host'].$url_parts['path'];
+            $get_variables = isset($url_parts['query']) ? $url_parts['query'] : ''; 
+
+            $root_url = \Libs\Helper::getRootURL();
+
+            $filtered_url = str_ireplace($root_url, '', $baseUrl);
+            $filtered_url = trim($filtered_url, '/');
+
+            $filtered_url_array = explode('/', $filtered_url);
+
+            $last_segments = [];
+
+            if(isset($filtered_url_array[0])){
+                array_push($last_segments, $filtered_url_array[0]);
+            }
+            if(isset($filtered_url_array[1])){
+                array_push($last_segments, $filtered_url_array[1]);
+            }
+
+            $last_segments = array_filter($last_segments);
+            
+            return [
+                'fullUrl' => $full_url,
+                'root_url' => $root_url,
+                'filtered_url' => $filtered_url,
+                'baseUrl' => $baseUrl,
+                'getVariables' => $get_variables,
+                'lastTwoSegments' => $last_segments
+            ];
+
+        }
+
+        /*private function parseUrl() {
+            $protocol = $this->getProtocol();
             $full_url = $protocol."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
             
             $url_parts = parse_url($full_url);
             $baseUrl = $url_parts['scheme'].'://'.$url_parts['host'].$url_parts['path'];
             $get_variables = isset($url_parts['query']) ? $url_parts['query'] : '';
             
-            $path1_ray = str_ireplace(\Libs\Helper::getRootURL(), '', $baseUrl);
+            // Remove the root URL
+            $path = str_ireplace(\Libs\Helper::getRootURL(), '', $baseUrl);
+            $path = str_ireplace(['http:', 'https:'], '', $path);
             
-            $path1_ray = str_ireplace('http:', '', $path1_ray);
-            $path1_ray = str_ireplace('https:', '', $path1_ray);
+            // Split the path into segments and remove empty values
+            $segments = array_filter(explode('/', trim($path, '/')), 'strlen');
             
-            $segments = explode('/', trim($path1_ray, '/'));
-            $last_segments = array_slice($segments,0, 2);
+            // Get the last two segments if they exist
+            $last_segments = [];
+            //if (count($segments) >= 2) {
+                // Remove any numeric segments at the end (like IDs)
+                $filtered_segments = array_filter($segments, function($segment) {
+                    return !is_numeric($segment);
+                });
+                
+                // Convert to array to reset keys
+                $filtered_segments = array_values($filtered_segments);
+                
+                // Get last two non-numeric segments
+                $count = count($filtered_segments);
+                $last1 = '';
+                if(isset($filtered_segments[$count - 1])){
+                    $last1 = $filtered_segments[$count - 1];
+                }
+                $last2 = '';
+                if(isset($filtered_segments[$count - 2])){
+                    $last2 = $filtered_segments[$count - 2];
+                }
+               // if ($count >= 2) {
+                    $last_segments = [
+                        $last2,  // Second to last segment
+                        $last1   // Last segment
+                    ];
+                //}
+           // }
+            $last_segments = array_filter($last_segments);
+            $root_url = trim(\Libs\Helper::getRootURL(), '/\\');
+            $baseUrl = trim($baseUrl, '/\\');
             
-            $root_url = trim(\Libs\Helper::getRootURL(), '/');
-            $root_url = trim($root_url, '\\');
-
-            $baseUrl = trim($baseUrl, '/');
-            $baseUrl = trim($baseUrl, '\\');
-
-            if($baseUrl == $root_url){
+            // Check if we're at the root URL
+            if ($baseUrl == $root_url) {
                 $last_segments = [];
             }
             
@@ -84,8 +146,7 @@
                 'getVariables' => $get_variables,
                 'lastTwoSegments' => $last_segments
             ];
-
-        }
+        }*/
 
 
     }
